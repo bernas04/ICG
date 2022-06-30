@@ -1,0 +1,31 @@
+a=(2,2)
+b=(3,2)
+c=(3,3)
+d=(2,3)
+
+
+centro do quadrado = (5/2,5/2)
+rotate 90º around its center
+
+1º step -> translação para o centro
+2º step -> rotação dos 90º
+3º step -> rotação de volta para a posição onde estava inicialmente
+
+
+	   |1 0 5/2 |   |cos(90) -sin(90) 0|   |1 0 -5/2 |
+M_global = |0 1 5/2 | * |sin(90) cos(90)  0| * |0 1 -5/2 |
+	   |0 0  1  |   |   0         0   1|   |0 0   1  |
+
+ 
+	   |0 -1 5/2|	|1 0 -5/2|   |0 -1 5|
+M_global = |1  0 5/2| * |0 1 -5/2| = |1  0 0|
+	   |0  0  1 |	|0 0   1 |   |0  0 1|
+
+
+|x'|   |0 -1 5|	  |x|
+|y'| = |1  0 0| * |y| 
+|1 |   |0  0 1|	  |1|
+
+x' = 5-y
+y' = x
+

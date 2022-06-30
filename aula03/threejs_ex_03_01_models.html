@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<!--
+
+		threejs_ex_03_01_models.html
+
+		J. Madeira - March 2021
+
+-->
+
+<head>
+
+	<title>three.js example 01 &mdash; Some Models</title>
+
+	<meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+	<style>
+		body {
+
+			background-color: #ffffff;
+
+			/* To use the complete page */
+
+			margin: 0px;
+
+			overflow: hidden;
+		}
+	</style>
+
+</head>
+
+<body>
+
+	<!-- The library --- Can be a local version -->
+
+	<script type="text/javascript" src="http://threejs.org/build/three.js"></script>
+
+	<!-- Javascript code that runs the Three.js example -->
+
+	<script type="text/javascript">
+
+		function createTree(cylinderRadius, cylinderHeight, baseConeRadius, coneHeight) {
+
+			// Creating a model by grouping basic geometries
+
+			// Cylinder centered at the origin
+
+
+
+			const cylinderGeometry = new THREE.CylinderGeometry(cylinderRadius, cylinderRadius, cylinderHeight, 32);
+
+			const redMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+
+			const cylinder = new THREE.Mesh(cylinderGeometry, redMaterial);
+
+			// Move base of the cylinder to y = 0
+
+			cylinder.position.y = cylinderHeight / 2.0;
+
+			// Cone
+
+
+			const coneGeometry = new THREE.ConeGeometry(baseConeRadius, coneHeight, 32);
+
+			const greenMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+
+			const cone = new THREE.Mesh(coneGeometry, greenMaterial);
+
+			cone.castShadow = true;
+			cone.receiveShadow = true;
+
+			cylinder.castShadow = true;
+			cylinder.receiveShadow = true;
+
+
+			// Move base of the cone to the top of the cylinder
+
+			cone.position.y = cylinderHeight + coneHeight / 2.0;
+
+			// Tree
+
+			var tree = new THREE.Group();
+
+			tree.add(cylinder);
+
+			tree.add(cone);
+
+			return tree;
+		}
+
+		// Once everything is loaded, run this function
+
+		function init() {
+
+			// The SCENE
+
+			var scene = new THREE.Scene();
+
+			// Plane Helper to represent the ZOX plane
+
+			const geometry = new THREE.PlaneGeometry( 800, 500 );
+			const material = new THREE.MeshPhongMaterial( {color: 0x006400, side: THREE.DoubleSide} );
+			const plane = new THREE.Mesh( geometry, material );
+
+			plane.rotation.x = -0.5 * Math.PI; // TODO: What happens if you comment out this line of code?
+			plane.position.x = 15;
+			plane.position.y = 0;
+			plane.position.z = 0;
+
+			
+
+
+			scene.add(plane);
+
+			// The coordinate axes
+
+			//var axes = new THREE.AxesHelper(20);
+			//scene.add(axes);
+
+			// Adding models to the scene
+			// raio do cilindro, cylinderHeight, baseConeRadius, coneHeight
+			var tree_1 = createTree(5,20,10,30);
+			var tree_2 = createTree(10,20,20,30);
+			var tree_3 = createTree(4,40,8,50);
+			var tree_4 = createTree(6,15,12,20);
+			var tree_5 = createTree(30,50,70,135)
+
+
+
+
+			tree_1.position.x = -50;
+			tree_1.position.z = -25;
+			
+
+
+			tree_2.position.x = -50;
+			tree_2.position.z = 50;
+
+			tree_3.position.x = 50;
+			tree_3.position.z = -25;
+
+			tree_4.position.x = 50;
+			tree_4.position.z = 50;
+
+			scene.add(tree_1);
+			scene.add(tree_2);
+			scene.add(tree_3);
+			scene.add(tree_4);
+			scene.add(tree_5);
+
+
+			const spotLight = new THREE.SpotLight( 0xffffff);
+			spotLight.position.set( 0, 100, 400 );
+
+			spotLight.castShadow = true;
+
+			scene.add( spotLight );
+
+
+
+			// The CAMERA --- A camera is added to the scene
+
+			// --- Where the viewer is and how he is looking at the scene
+
+			var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 400);
+
+			camera.position.y = 50;
+
+			camera.position.z = 150;
+
+			// Point the camera to the center of the scene
+
+			camera.lookAt(scene.position);
+
+			scene.add(camera)
+
+			// The RENDERER --- To display the scene on the Web page
+
+			var renderer = new THREE.WebGLRenderer({ antialias: true });
+
+			renderer.setClearColor(new THREE.Color(0xffffff));
+
+			renderer.setPixelRatio(window.devicePixelRatio);
+
+			renderer.setSize(window.innerWidth, window.innerHeight);
+
+			renderer.shadowMap.enabled = true;
+
+			renderer.shadowMapType = THREE.PCFSoftShadowMap;
+
+			plane.receiveShadow = true;
+
+			
+
+
+
+			// Add the output of the renderer
+
+			document.body.appendChild(renderer.domElement);
+
+			// Render the scene
+
+			renderer.render(scene, camera);
+
+			var step = 0;
+			var step1 = 0;
+
+			// Update model features and render the scene
+			renderScene()
+			function renderScene() {
+				// Render using requestAnimationFrame
+				requestAnimationFrame(renderScene);
+				renderer.render(scene, camera);
+				step += 0.01;
+				step1 += 0.03;
+
+				
+				tree_1.position.x = -50 + (10 * Math.sin(step1));
+				tree_1.position.z = -25 + (10 * Math.cos(step1));
+				
+				tree_2.position.x = -50 - (15 * Math.cos(step1));
+				tree_2.position.z = 50 + (15 * Math.sin(step1));
+
+				tree_3.rotation.y = -5;
+				tree_3.position.x = 20 * Math.cos(step1) + 50;	// somar as coordenadas do local onde queremos
+				tree_3.position.z = 10 * Math.sin(step1) + -25;
+
+				tree_4.rotation.y += 5;   // Roda sobre ela própria
+				tree_4.position.x = 10 * Math.sin(step1) + 50;	// somar as coordenadas do local onde queremos
+				tree_4.position.z = 10 * Math.cos(step1) + 50;
+
+				tree_5.rotation.y +=50;
+				tree_5.position.x =250 * Math.sin(step);
+				tree_5.position.z =250 * Math.cos(step);
+
+
+
+			}
+		}
+
+		window.onload = init
+
+	</script>
+
+</body>
+</html>
