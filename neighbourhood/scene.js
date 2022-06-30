@@ -514,6 +514,7 @@ function computeFrame(time) {
     const sun = sceneElements.sceneGraph.getObjectByName("sun");
     const light = sceneElements.sceneGraph.getObjectByName("light");
     const pavilhaoLight = sceneElements.sceneGraph.getObjectByName("pavilhaoLight");
+    const portao = sceneElements.sceneGraph.getObjectByName("portao");
     
     lightSun.rotation.z-=options.velx;
 
@@ -523,7 +524,7 @@ function computeFrame(time) {
     
     const car1 = sceneElements.sceneGraph.getObjectByName("car1");
     const car2 = sceneElements.sceneGraph.getObjectByName("car2");
-    
+
     if (keyW && car1.position.z > -95) {
         car1.translateX(options.dispZ);
     }
@@ -566,10 +567,18 @@ function computeFrame(time) {
     if (pos.y<0 && pos.y>-20){
         sceneElements.renderer.setClearColor('rgb(21, 40, 82)', 1)
         light.intensity=0;
+        if (portao.position.z>-80){
+            portao.translateX(options.dispZ);
+        }
     }
     else if (pos.y<-20){
+        console.log("AQUI")
         sceneElements.renderer.setClearColor('rgb(8, 24, 58)', 1)
         keyL = true;
+        if (portao.position.z>-80){
+            portao.translateX(options.dispZ);
+        }
+
     }
     else if (pos.y>0 && pos.y<20){
         sceneElements.renderer.setClearColor('rgb(253, 94, 83)', 1)
@@ -579,15 +588,24 @@ function computeFrame(time) {
     else if(pos.y>=20 && pos.y<40){
         sceneElements.renderer.setClearColor('rgb(252, 156, 84)', 1)
         light.intensity=options.lightIntensity*0.50;
+        if (portao.position.z<-65){
+            portao.translateX(-options.dispZ);
+        }
     }
     else if(pos.y>=40 && pos.y<60){
         sceneElements.renderer.setClearColor('rgb(255, 227, 115)', 1)
         light.intensity=options.lightIntensity*0.75;
+        if (portao.position.z<-65){
+            portao.translateX(-options.dispZ);
+        }
 
     }
     else{
         sceneElements.renderer.setClearColor('rgb(137, 177, 204)', 1)
         light.intensity=options.lightIntensity;
+        if (portao.position.z<-65){
+            portao.translateX(-options.dispZ);
+        }
     }
     
     helper.render(sceneElements);
@@ -703,7 +721,7 @@ var options = {
     vely: 0.005,
     dispZ: 0.7,
     lightIntensity: 0.5,
-    spotlightIntensity: 0.66,
+    spotlightIntensity: 0.15,
 };
 var velocity = gui.addFolder('Velocity');
 velocity.add(options, 'velx', 0.0005, 0.02).name('Sun').listen();
@@ -1546,3 +1564,14 @@ sceneElements.sceneGraph.add(lightPolidesportivo);
 
 const luzVelha = createPoinLight(61,11,-85,"pavilhaoLight");
 sceneElements.sceneGraph.add(luzVelha);
+
+
+// Portão do polidesportivo
+
+const portao = createBox(19,10,0.3, color=0x5d2906, texture="");
+portao.name="portao";
+portao.position.x=37;
+portao.position.y=5;
+portao.position.z=-80;
+portao.rotation.y=Math.PI/2;
+sceneElements.sceneGraph.add(portao);
