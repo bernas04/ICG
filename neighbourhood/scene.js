@@ -6,13 +6,13 @@ const sceneElements = {
 
 
 // Menu das instruções
-/* document.onload = () => {
+document.onload = () => {
     document.getElementById("Tag3DScene").style.display="none"
 };
 
 document.getElementById("start").onclick = () => {
     document.getElementById("instructions").style.display = "none";
-}; */
+};
 
 
 
