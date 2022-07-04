@@ -744,10 +744,6 @@ futsalPlane.position.z=80;
 
 sceneElements.sceneGraph.add(futsalPlane);
 
-// TODO: apagar
-const axesHelper = new THREE.AxesHelper( 20 );
-axesHelper.position.x=10;
-sceneElements.sceneGraph.add( axesHelper );
 
 const post1 = createCylinder(0.5,0.5,5,0x559656);
 post1.position.x=10;
